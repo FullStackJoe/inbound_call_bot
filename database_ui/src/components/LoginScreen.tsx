@@ -37,10 +37,11 @@ export function LoginScreen({ onLogin }: { onLogin: () => void }) {
         <CardContent>
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <Input
-              type="password"
+              type="text"
               placeholder="API Key"
               value={key}
               onChange={(e) => setKey(e.target.value)}
+              autoComplete="off"
               autoFocus
             />
             {error && <p className="text-sm text-destructive">{error}</p>}
