@@ -97,7 +97,7 @@ function LoadsPage({ onAuthError }: { onAuthError: () => void }) {
 }
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState<Page>("loads");
+  const [currentPage, setCurrentPage] = useState<Page>("analytics");
   const [authenticated, setAuthenticated] = useState(!!getApiKey());
 
   const handleDisconnect = () => {
