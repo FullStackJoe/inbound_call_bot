@@ -87,3 +87,67 @@ async def test_get_load_by_id(client: AsyncClient):
 async def test_get_load_not_found(client: AsyncClient):
     resp = await client.get("/api/v1/loads/NONEXISTENT", headers=HEADERS)
     assert resp.status_code == 404
+
+
+async def test_get_all_loads_includes_all_statuses(client: AsyncClient):
+    resp = await client.get("/api/v1/loads/all", headers=HEADERS)
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data["total"] == 3
+    statuses = {load["status"] for load in data["loads"]}
+    assert "available" in statuses
+    assert "booked" in statuses
+
+
+async def test_get_all_loads_filter_by_status(client: AsyncClient):
+    resp = await client.get("/api/v1/loads/all", headers=HEADERS, params={"status": "booked"})
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data["total"] == 1
+    assert data["loads"][0]["status"] == "booked"
+
+
+async def test_create_load(client: AsyncClient):
+    payload = {
+        "load_id": "NEW-001",
+        "origin": "Seattle, WA",
+        "destination": "Portland, OR",
+        "pickup_datetime": "2026-04-15T08:00:00Z",
+        "delivery_datetime": "2026-04-16T08:00:00Z",
+        "equipment_type": "Flatbed",
+        "loadboard_rate": 1500.00,
+    }
+    resp = await client.post("/api/v1/loads", headers=HEADERS, json=payload)
+    assert resp.status_code == 201
+    data = resp.json()
+    assert data["load_id"] == "NEW-001"
+    assert data["origin"] == "Seattle, WA"
+    assert data["status"] == "available"
+
+
+async def test_create_load_duplicate(client: AsyncClient):
+    payload = {
+        "load_id": "TEST-001",
+        "origin": "Seattle, WA",
+        "destination": "Portland, OR",
+        "pickup_datetime": "2026-04-15T08:00:00Z",
+        "delivery_datetime": "2026-04-16T08:00:00Z",
+        "equipment_type": "Flatbed",
+        "loadboard_rate": 1500.00,
+    }
+    resp = await client.post("/api/v1/loads", headers=HEADERS, json=payload)
+    assert resp.status_code == 409
+
+
+async def test_delete_load(client: AsyncClient):
+    resp = await client.delete("/api/v1/loads/TEST-001", headers=HEADERS)
+    assert resp.status_code == 200
+    assert "deleted" in resp.json()["message"]
+
+    resp2 = await client.get("/api/v1/loads/TEST-001", headers=HEADERS)
+    assert resp2.status_code == 404
+
+
+async def test_delete_load_not_found(client: AsyncClient):
+    resp = await client.delete("/api/v1/loads/NONEXISTENT", headers=HEADERS)
+    assert resp.status_code == 404
