@@ -16,23 +16,31 @@ export function Navbar({
 }) {
   return (
     <header className="border-b bg-background">
-      <div className="mx-auto flex h-14 max-w-6xl items-center gap-6 px-6">
+      <div className="relative mx-auto flex h-14 max-w-6xl items-center px-6">
         <span className="text-lg font-bold tracking-tight">Acme Logistics</span>
-        <nav className="flex gap-1">
+        <nav className="absolute inset-x-0 flex items-center justify-center gap-6">
           {(["analytics", "loads"] as const).map((p) => (
             <button
               key={p}
               onClick={() => onPageChange(p)}
               className={cn(
-                "px-3 py-1.5 text-sm font-medium rounded-md transition-colors",
+                "text-sm transition-colors",
                 page === p
-                  ? "bg-primary text-primary-foreground"
-                  : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                  ? "text-foreground font-semibold"
+                  : "text-muted-foreground hover:text-foreground"
               )}
             >
               {p === "analytics" ? "Analytics" : "Loads"}
             </button>
           ))}
+          <a
+            href="https://happyrobot.johanhyldig.dk/api/docs"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+          >
+            API Docs
+          </a>
         </nav>
         <div className="ml-auto">
           {authenticated && (
