@@ -28,10 +28,10 @@ export function LoginScreen({ onLogin }: { onLogin: () => void }) {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-muted/40 px-4">
+    <div className="flex items-center justify-center py-20 px-4">
       <Card className="w-full max-w-sm">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold">HappyRobot</CardTitle>
+          <CardTitle className="text-2xl font-bold">Acme Logistics</CardTitle>
           <CardDescription>Enter your API key to connect</CardDescription>
         </CardHeader>
         <CardContent>

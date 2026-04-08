@@ -34,7 +34,7 @@ services:
 
   ui:
     build:
-      context: ../database_ui
+      context: ../frontend
       args:
         VITE_API_URL: ""
     networks:

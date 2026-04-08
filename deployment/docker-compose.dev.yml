@@ -27,7 +27,7 @@ services:
     image: node:20-alpine
     working_dir: /app
     volumes:
-      - ../database_ui:/app
+      - ../frontend:/app
       - ui_node_modules:/app/node_modules
     ports:
       - "5173:5173"

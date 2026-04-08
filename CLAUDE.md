@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Freight load management platform with three top-level directories:
 - **`api/`** — FastAPI REST API (Python 3.12+, async SQLAlchemy 2.0+, PostgreSQL, Alembic)
-- **`database_ui/`** — React admin UI for viewing/creating/deleting loads (Vite + TypeScript + shadcn/ui + Tailwind CSS)
+- **`frontend/`** — React admin UI for viewing/creating/deleting loads (Vite + TypeScript + shadcn/ui + Tailwind CSS)
 - **`deployment/`** — Docker Compose files, Caddyfile, and deploy script
 
 ## Commands
@@ -29,7 +29,7 @@ docker compose up -d                                # Run production stack
 ./deploy.sh <hetzner-ip> <domain>                   # Deploy to Hetzner
 ```
 
-### Frontend (run from `database_ui/`)
+### Frontend (run from `frontend/`)
 
 ```bash
 npm install              # Install dependencies
@@ -83,9 +83,9 @@ Tests use **pytest-asyncio** with an in-memory SQLite database (aiosqlite) and h
 ## Frontend Architecture
 
 - **Vite + React + TypeScript** with **shadcn/ui** components and **Tailwind CSS v4**
-- `database_ui/src/api/` — API client with `X-API-Key` auth from `sessionStorage`
-- `database_ui/src/components/` — UI components (LoadsTable, FilterBar, CreateLoadDialog, DeleteConfirmDialog)
-- `database_ui/src/hooks/useLoads.ts` — Data fetching hook with filtering/pagination state
+- `frontend/src/api/` — API client with `X-API-Key` auth from `sessionStorage`
+- `frontend/src/components/` — UI components (LoadsTable, FilterBar, CreateLoadDialog, DeleteConfirmDialog)
+- `frontend/src/hooks/useLoads.ts` — Data fetching hook with filtering/pagination state
 - Login flow: user enters API key, validated against the API, stored in `sessionStorage`
 
 ## Deployment

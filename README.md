@@ -6,7 +6,7 @@ Freight load management platform — a REST API for searching/managing freight l
 
 ```
 api/            FastAPI backend (Python 3.12, PostgreSQL, async SQLAlchemy)
-database_ui/    React admin UI (Vite, TypeScript, shadcn/ui, Tailwind CSS)
+frontend/    React admin UI (Vite, TypeScript, shadcn/ui, Tailwind CSS)
 deployment/     Docker Compose, Caddy config, deploy script
 ```
 

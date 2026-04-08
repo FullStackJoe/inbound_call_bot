@@ -6,6 +6,6 @@ __pycache__/
 dist/
 .venv/
 .DS_Store
-database_ui/node_modules/
-database_ui/dist/
-database_ui/.env
+frontend/node_modules/
+frontend/dist/
+frontend/.env

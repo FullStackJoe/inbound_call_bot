@@ -36,7 +36,7 @@ rsync -avz --exclude '.venv' --exclude '__pycache__' --exclude '.env' \
 
 echo "==> Syncing UI files..."
 rsync -avz --exclude 'node_modules' --exclude 'dist' --exclude '.git' \
-    "${REPO_ROOT}/database_ui/" "root@${SERVER_IP}:${REMOTE_DIR}/database_ui/"
+    "${REPO_ROOT}/frontend/" "root@${SERVER_IP}:${REMOTE_DIR}/frontend/"
 
 echo "==> Syncing deployment files..."
 rsync -avz "${REPO_ROOT}/deployment/" "root@${SERVER_IP}:${REMOTE_DIR}/deployment/"
