@@ -24,8 +24,6 @@ services:
       - ../api/.env
     environment:
       DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-happyrobot}:${POSTGRES_PASSWORD:-happyrobot}@db:5432/${POSTGRES_DB:-happyrobot}
-      API_KEY: ${API_KEY:-change-me-in-production}
-      ENVIRONMENT: ${ENVIRONMENT:-production}
     depends_on:
       db:
         condition: service_healthy
