@@ -1,4 +1,4 @@
-{$DOMAIN:localhost} {
+happyrobot.johanhyldig.dk {
     handle /api/* {
         reverse_proxy api:8000
     }
