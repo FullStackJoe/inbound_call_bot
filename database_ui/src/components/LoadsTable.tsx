@@ -54,7 +54,7 @@ export function LoadsTable({
   }
 
   return (
-    <div className="overflow-x-auto">
+    <div>
       <Table>
         <TableHeader>
           <TableRow>
