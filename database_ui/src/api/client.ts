@@ -1,4 +1,4 @@
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
+const API_BASE = import.meta.env.VITE_API_URL ?? "";
 
 export function getApiKey(): string | null {
   return sessionStorage.getItem("api_key");
