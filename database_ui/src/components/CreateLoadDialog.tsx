@@ -42,8 +42,8 @@ export function CreateLoadDialog({
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  const set = (field: keyof LoadCreate, value: string | number) =>
-    setForm((prev) => ({ ...prev, [field]: value }));
+  const set = (field: keyof LoadCreate, value: string | number | null) =>
+    setForm((prev) => ({ ...prev, [field]: value ?? "" }));
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

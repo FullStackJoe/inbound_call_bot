@@ -20,7 +20,7 @@ export function FilterBar({
 }) {
   const [origin, setOrigin] = useState(filters.origin ?? "");
   const [destination, setDestination] = useState(filters.destination ?? "");
-  const debounceRef = useRef<ReturnType<typeof setTimeout>>();
+  const debounceRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   useEffect(() => {
     clearTimeout(debounceRef.current);
@@ -57,9 +57,9 @@ export function FilterBar({
         className="w-44"
       />
       <Select
-        value={filters.equipment_type ?? "__all__"}
+        value={filters.equipment_type || "__all__"}
         onValueChange={(v) =>
-          onChange({ ...filters, equipment_type: v === "__all__" ? undefined : v })
+          onChange({ ...filters, equipment_type: !v || v === "__all__" ? undefined : v })
         }
       >
         <SelectTrigger className="w-40">
@@ -75,9 +75,9 @@ export function FilterBar({
         </SelectContent>
       </Select>
       <Select
-        value={filters.status ?? "__all__"}
+        value={filters.status || "__all__"}
         onValueChange={(v) =>
-          onChange({ ...filters, status: v === "__all__" ? undefined : v })
+          onChange({ ...filters, status: !v || v === "__all__" ? undefined : v })
         }
       >
         <SelectTrigger className="w-36">
