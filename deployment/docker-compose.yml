@@ -1,6 +1,8 @@
 services:
   db:
     image: postgres:16-alpine
+    env_file:
+      - ../api/.env
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-happyrobot}
       POSTGRES_USER: ${POSTGRES_USER:-happyrobot}
@@ -17,7 +19,9 @@ services:
     restart: unless-stopped
 
   api:
-    build: .
+    build: ../api
+    env_file:
+      - ../api/.env
     environment:
       DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-happyrobot}:${POSTGRES_PASSWORD:-happyrobot}@db:5432/${POSTGRES_DB:-happyrobot}
       API_KEY: ${API_KEY:-change-me-in-production}
@@ -27,6 +31,15 @@ services:
         condition: service_healthy
     networks:
       - backend
+      - frontend
+    restart: unless-stopped
+
+  ui:
+    build:
+      context: ../database_ui
+      args:
+        VITE_API_URL: ""
+    networks:
       - frontend
     restart: unless-stopped
 
@@ -41,6 +54,7 @@ services:
       - caddy_config:/config
     depends_on:
       - api
+      - ui
     networks:
       - frontend
     restart: unless-stopped

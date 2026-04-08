@@ -1,17 +1,21 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Usage: ./scripts/deploy.sh <hetzner-ip> <domain>
-# Example: ./scripts/deploy.sh 65.108.x.x happyrobot-api.johanhyldig.dk
+# Usage: ./deploy.sh <hetzner-ip> <domain>
+# Example: ./deploy.sh 65.108.x.x happyrobot-api.johanhyldig.dk
+#
+# Run from the deployment/ directory.
 #
 # Prerequisites:
 #   1. SSH access to the server (ssh root@<ip>)
 #   2. DNS A record pointing <domain> to <ip>
-#   3. A .env file in the project root with production values
+#   3. A .env file in api/ with production values
 
 SERVER_IP="${1:?Usage: deploy.sh <server-ip> <domain>}"
 DOMAIN="${2:?Usage: deploy.sh <server-ip> <domain>}"
-APP_DIR="/opt/happyrobot"
+REMOTE_DIR="/opt/happyrobot"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+REPO_ROOT="$(dirname "$SCRIPT_DIR")"
 
 echo "==> Deploying to ${SERVER_IP} with domain ${DOMAIN}"
 
@@ -25,20 +29,27 @@ fi
 INSTALL
 
 # Sync project files
-echo "==> Syncing files..."
+echo "==> Syncing API files..."
 rsync -avz --exclude '.venv' --exclude '__pycache__' --exclude '.env' \
     --exclude 'pgdata' --exclude '.git' \
-    ./ "root@${SERVER_IP}:${APP_DIR}/"
+    "${REPO_ROOT}/api/" "root@${SERVER_IP}:${REMOTE_DIR}/api/"
+
+echo "==> Syncing UI files..."
+rsync -avz --exclude 'node_modules' --exclude 'dist' --exclude '.git' \
+    "${REPO_ROOT}/database_ui/" "root@${SERVER_IP}:${REMOTE_DIR}/database_ui/"
+
+echo "==> Syncing deployment files..."
+rsync -avz "${REPO_ROOT}/deployment/" "root@${SERVER_IP}:${REMOTE_DIR}/deployment/"
 
 # Copy .env and set domain
 echo "==> Configuring environment..."
-scp .env "root@${SERVER_IP}:${APP_DIR}/.env"
-ssh "root@${SERVER_IP}" "echo 'DOMAIN=${DOMAIN}' >> ${APP_DIR}/.env"
+scp "${REPO_ROOT}/api/.env" "root@${SERVER_IP}:${REMOTE_DIR}/api/.env"
+ssh "root@${SERVER_IP}" "echo 'DOMAIN=${DOMAIN}' >> ${REMOTE_DIR}/api/.env"
 
 # Build and start
 echo "==> Starting services..."
 ssh "root@${SERVER_IP}" << REMOTE
-cd ${APP_DIR}
+cd ${REMOTE_DIR}/deployment
 docker compose down || true
 docker compose build --no-cache
 docker compose up -d
@@ -49,5 +60,7 @@ echo ""
 echo "==> Health check:"
 curl -s http://localhost:8000/api/v1/health || echo "API not ready yet, check logs with: docker compose logs api"
 echo ""
-echo "==> Deployment complete! API available at https://${DOMAIN}"
+echo "==> Deployment complete!"
+echo "    API: https://${DOMAIN}/api/v1/health"
+echo "    UI:  https://${DOMAIN}"
 REMOTE

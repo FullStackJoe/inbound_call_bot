@@ -4,9 +4,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Freight load management platform with two parts:
+Freight load management platform with three top-level directories:
 - **`api/`** — FastAPI REST API (Python 3.12+, async SQLAlchemy 2.0+, PostgreSQL, Alembic)
 - **`database_ui/`** — React admin UI for viewing/creating/deleting loads (Vite + TypeScript + shadcn/ui + Tailwind CSS)
+- **`deployment/`** — Docker Compose files, Caddyfile, and deploy script
 
 ## Commands
 
@@ -14,12 +15,18 @@ Freight load management platform with two parts:
 
 ```bash
 uv pip install -e ".[dev]"                          # Install dependencies
-docker compose -f docker-compose.dev.yml up         # Run full dev stack (DB + API + UI)
 uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload  # Run API standalone
 pytest                                              # Run all tests
 pytest tests/test_loads.py::test_create_load -v     # Run single test
 alembic upgrade head                                # Apply migrations
-./scripts/deploy.sh <hetzner-ip> <domain>           # Production deploy
+```
+
+### Deployment (run from `deployment/`)
+
+```bash
+docker compose -f docker-compose.dev.yml up         # Run full dev stack (DB + API + UI)
+docker compose up -d                                # Run production stack
+./deploy.sh <hetzner-ip> <domain>                   # Deploy to Hetzner
 ```
 
 ### Frontend (run from `database_ui/`)
@@ -83,4 +90,4 @@ Tests use **pytest-asyncio** with an in-memory SQLite database (aiosqlite) and h
 
 ## Deployment
 
-Docker Compose with three services in production: PostgreSQL 16, FastAPI (non-root user), and Caddy reverse proxy (auto TLS). Dev compose adds a fourth service for the React UI on port 5173.
+All deployment config lives in `deployment/`. Production runs four Docker services: PostgreSQL 16, FastAPI (non-root user), React UI (nginx), and Caddy reverse proxy (auto TLS). Caddy routes `/api/*` to the API and everything else to the UI. Dev compose exposes DB on 5432, API on 8000, and UI on 5173.

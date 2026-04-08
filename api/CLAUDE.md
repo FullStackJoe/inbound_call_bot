@@ -12,8 +12,8 @@ FastAPI REST API for freight load search in a freight brokerage platform. Fully 
 # Install dependencies
 uv pip install -e ".[dev]"
 
-# Run dev environment (PostgreSQL + API)
-docker compose -f docker-compose.dev.yml up
+# Run dev environment (from deployment/ directory)
+# cd ../deployment && docker compose -f docker-compose.dev.yml up
 
 # Run API locally (requires DATABASE_URL and API_KEY env vars)
 uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
@@ -32,8 +32,8 @@ alembic revision --autogenerate -m "description"
 alembic upgrade head
 alembic downgrade -1
 
-# Production deploy
-./scripts/deploy.sh <hetzner-ip> <domain>
+# Production deploy (from deployment/ directory)
+# cd ../deployment && ./deploy.sh <hetzner-ip> <domain>
 ```
 
 ## Architecture
@@ -82,4 +82,4 @@ Tests use **pytest-asyncio** with an in-memory SQLite database (aiosqlite) and h
 
 ## Deployment
 
-Docker Compose with three services in production: PostgreSQL 16, FastAPI (non-root user), and Caddy reverse proxy (auto TLS). Dev compose omits Caddy and exposes ports directly.
+Deployment config lives in `../deployment/`. See root CLAUDE.md for deployment commands.
