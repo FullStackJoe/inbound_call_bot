@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 Freight load management platform with three top-level directories:
 - **`api/`** — FastAPI REST API (Python 3.12+, async SQLAlchemy 2.0+, PostgreSQL, Alembic)
 - **`frontend/`** — React admin UI for viewing/creating/deleting loads (Vite + TypeScript + shadcn/ui + Tailwind CSS)
-- **`deployment/`** — Docker Compose files, Caddyfile, and deploy script
+- **`deployment/`** — Docker Compose files and Caddyfile
 
 ## Commands
 
@@ -26,7 +26,6 @@ alembic upgrade head                                # Apply migrations
 ```bash
 docker compose -f docker-compose.dev.yml up         # Run full dev stack (DB + API + UI)
 docker compose up -d                                # Run production stack
-./deploy.sh <hetzner-ip> <domain>                   # Deploy to Hetzner
 ```
 
 ### Frontend (run from `frontend/`)

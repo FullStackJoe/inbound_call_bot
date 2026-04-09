@@ -32,8 +32,6 @@ alembic revision --autogenerate -m "description"
 alembic upgrade head
 alembic downgrade -1
 
-# Production deploy (from deployment/ directory)
-# cd ../deployment && ./deploy.sh <hetzner-ip> <domain>
 ```
 
 ## Architecture
