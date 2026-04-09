@@ -1,6 +1,10 @@
 # Acme Logistics
 
-Freight load management platform — FastAPI + React + PostgreSQL.
+Freight load management platform.
+
+- **API** — Python 3.12, FastAPI, async SQLAlchemy 2.0, PostgreSQL, Alembic
+- **Frontend** — React, TypeScript, Vite, shadcn/ui, Tailwind CSS
+- **Infra** — Docker Compose, Caddy (reverse proxy + auto TLS), nginx
 
 ## Deploy
 
