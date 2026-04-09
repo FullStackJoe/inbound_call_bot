@@ -9,21 +9,10 @@ import { LoadsTable } from "@/components/LoadsTable";
 import { Pagination } from "@/components/Pagination";
 import { CreateLoadDialog } from "@/components/CreateLoadDialog";
 import { DeleteConfirmDialog } from "@/components/DeleteConfirmDialog";
+import { AnalyticsPage } from "@/components/analytics/AnalyticsPage";
 import { useLoads } from "@/hooks/useLoads";
 import { clearApiKey, getApiKey } from "@/api/client";
 import type { LoadCreate } from "@/types/load";
-
-function AnalyticsPage() {
-  return (
-    <main className="mx-auto max-w-6xl px-6 py-8">
-      <Card>
-        <CardContent className="flex items-center justify-center py-20">
-          <p className="text-muted-foreground">Analytics coming soon</p>
-        </CardContent>
-      </Card>
-    </main>
-  );
-}
 
 function LoadsPage({ onAuthError }: { onAuthError: () => void }) {
   const [authenticated, setAuthenticated] = useState(!!getApiKey());
